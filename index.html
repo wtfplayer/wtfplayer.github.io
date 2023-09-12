@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <meta charset="UTF-8">
-      <meta http-equiv="refresh" content="3;url=https://example.com">
-   </head>
-   <body>
-       <p>You've seen too much. Redirecting..</p>
-   </body>
+<head>
+    <title>This site can't be reached</title>
+    <style>
+        body {
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .message {
+            font-size: 24px;
+            font-weight: bold;
+            color: #666;
+        }
+        .description {
+            font-size: 16px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="message">This site can't be reached</div>
+        <div class="description">The webpage at the requested URL might be temporarily down or it may have moved permanently to a new web address.</div>
+    </div>
+</body>
 </html>
