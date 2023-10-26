@@ -1,0 +1,84 @@
+body {
+    background-color: rgb(32, 32, 32);
+    align-items: center;
+    font-family: Monaco, monospace;
+    text-align: center;
+    color: rgba(255, 255, 255, 1);
+    height: max(90vh, 650px);
+}
+
+.bdiv {
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.25);
+    width: auto;
+    height: 100%;
+    margin: auto;
+    text-align: center;
+    padding: 10px;
+}
+
+.ddiv {
+    border-radius: 5px;
+    background-color: rgba(77, 77, 77, 0.5);
+    width: max(min(85%, 1095px), 350px);
+    margin: auto;
+    margin-top: 5px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.hbttn {
+    border-radius: 5px;
+    margin-left: 5px;
+    height: 100%;
+}
+
+.bttn {
+    margin-top: 5px;
+    border-radius: 5px;
+    border-width: 0px;
+}
+
+.cdiv {
+    border-radius: 5px;
+    background-color: rgba(77, 77, 77, 0.5);
+    width: max(min(85%, 1095px), 350px);
+    margin: auto;
+    margin-top: 5px;
+    text-align: center;
+    margin-bottom: 10px;
+    overflow-x: auto;
+}
+
+h1 {
+    font-size: 50px;
+    margin-top: 10%;
+    margin-bottom: 20px;
+}
+
+textarea {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    resize: none;
+    height: 55px;
+    font-size: 15px;
+    width: 99%;
+    border-width: 0px;
+    text-wrap: nowrap;
+    color: white;
+    background-color: rgb(69 69 69);
+    overflow: hidden;
+    border-color: rgba(0, 0, 0, 0);
+}
+
+textarea:focus {
+    cursor: default;
+    background-color: rgb(69 69 69);
+    color: rgb(255, 255, 255);
+    border-color: rgba(0, 0, 0, 0);
+}
+
+footer {
+    height: 60px;
+}
