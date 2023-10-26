@@ -1,89 +1,39 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Bike World 1</title>
-    <style>
-        body {
-            background-color: rgb(32, 32, 32);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            font-family: Monaco, monospace;
-            text-align: center;
-            color: rgba(255, 255, 255, 1);
-        }
+<link rel="stylesheet" href="styles.css">
+<title></title>
+<meta content="W1 Complete" property="og:title" />
+<meta content="Auto Complete Bike Obby W1" property="og:description" />
+<meta content="Bike Obby W1" property="og:url" />
 
-        .bdiv {
-            border-radius: 5px;
-            background-color: rgba(69, 69, 69);
-            text-align: center;
-            padding: 10px;
-            max-width: 85%;
-        }
-
-        .ddiv {
-            border-radius: 5px;
-            background-color: rgba(77, 77, 77, 0.5);
-            width: 100%;
-            margin-top: 5px;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        h1 {
-            font-size: 50px;
-            margin-top: 20px;
-            margin-bottom: 20px.
-        }
-
-        textarea {
-            margin-top: 5px;
-            margin-bottom: 5px;
-            border-radius: 5px;
-            resize: none;
-            height: 89px;
-            width: 99%;
-            border-width: 0px;
-            text-wrap: nowrap;
-            font-size: 15px;
-            color: white;
-            background-color: rgb(69, 69, 69);
-            overflow: hidden;
-            border-color: rgba(0, 0, 0, 0);
-        }
-
-        textarea:focus {
-            cursor: default;
-            background-color: rgb(69, 69, 69);
-            color: rgb(255, 255, 255);
-            border-color: rgba(0, 0, 0, 0);
-        }
-
-        footer {
-            height: 60px;
-        }
-    </style>
-</head>
 <body>
     <div class="bdiv">
-        <div class "ddiv">
-            <h1>Roblox OYOABI W1</h1>
-            <textarea readonly id="myTextbox" onclick="copyText()">
- getgenv().Key = "zpVPeVdqtH"
- 
- loadstring(game:HttpGet('https://wtfplayer.github.io/world1.lua'))() </textarea>
+        <h1 style="text-align: center;">Roblox Bike Obby W1</h1>
+        <div class="ddiv">
+            <p style="margin: 5px; margin-bottom: 2px; padding-top: 5px;">A Roblox Obby But You're on a Bike Script</p>
+            <table width="99.5%" style="margin: auto;">
+                <tr>
+                    <td>Script:</td>
+                </tr>
+                <tr>
+                    <td>
+                        <textarea id="Loadstring" title="Click to Copy" readonly>
+getgenv().Key = "zpVPeVdqtH"
+loadstring(game:HttpGet('https://wtfplayer.github.io/world1.lua'))()
+                        </textarea>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
-    <footer>
-    </footer>
-    <script>
-        function copyText() {
-            var textbox = document.getElementById("myTextbox");
-            textbox.select();
-            document.execCommand("copy");
-        }
-    </script>
 </body>
+
+<script>
+    var textarea = document.getElementById("Loadstring");
+    textarea.onclick = function() {
+        this.select(); // Select the text inside the textarea
+        document.execCommand('copy'); // Copy the selected text to the clipboard
+    }
+</script>
+
 </html>
