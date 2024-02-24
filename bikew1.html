@@ -1,12 +1,32 @@
 <!DOCTYPE html>
-<html>
-<link rel="stylesheet" href="styles.css">
-<title>Roblox Obby Bike</title>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <title>Roblox Obby Bike</title>
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .bdiv {
+            text-align: center;
+        }
+
+        .ddiv {
+            width: 80%;
+            margin: auto;
+        }
+    </style>
+</head>
 <body>
     <div class="bdiv">
-        <h1 style="text-align: center;">Roblox Bike Obby W1</h1>
+        <h1>Roblox Bike Obby W1</h1>
         <div class="ddiv">
-            <p style="margin: 5px; margin-bottom: 2px; padding-top: 5px;">A Roblox Obby But You're on a Bike Script</p>
+            <p>A Roblox Obby But You're on a Bike Script</p>
             <table width="99.5%" style="margin: auto;">
                 <tr>
                     <td>Script:</td>
@@ -22,14 +42,13 @@ loadstring(game:HttpGet('https://wtfplayer.github.io/world1.lua'))()
             </table>
         </div>
     </div>
+
+    <script>
+        var textarea = document.getElementById("Loadstring");
+        textarea.onclick = function() {
+            this.select(); // Select the text inside the textarea
+            document.execCommand('copy'); // Copy the selected text to the clipboard
+        }
+    </script>
 </body>
-
-<script>
-    var textarea = document.getElementById("Loadstring");
-    textarea.onclick = function() {
-        this.select(); // Select the text inside the textarea
-        document.execCommand('copy'); // Copy the selected text to the clipboard
-    }
-</script>
-
 </html>
