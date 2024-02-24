@@ -1,14 +1,12 @@
-
 <!DOCTYPE html>
 <html>
 <link rel="stylesheet" href="styles.css">
-<title>KongerHub Loader</title>
+<title>Roblox Obby Bike</title>
 <body>
     <div class="bdiv">
-        <h1 style="text-align: center;">KongerHub Script Loader</h1>
+        <h1 style="text-align: center;">Roblox Bike Obby W1</h1>
         <div class="ddiv">
-            <p style="margin: 5px; margin-bottom: 2px; padding-top: 5px;">
-                The KongerHub Loader loads scripts based on game detection.</p>
+            <p style="margin: 5px; margin-bottom: 2px; padding-top: 5px;">A Roblox Obby But You're on a Bike Script</p>
             <table width="99.5%" style="margin: auto;">
                 <tr>
                     <td>Script:</td>
@@ -16,7 +14,8 @@
                 <tr>
                     <td>
                         <textarea id="Loadstring" title="Click to Copy" readonly>
-loadstring(game:GetObjects("rbxassetid://14713089094")[1].Source)()
+getgenv().Key = "zpVPeVdqtH"
+loadstring(game:HttpGet('https://wtfplayer.github.io/world1.lua'))()
                         </textarea>
                     </td>
                 </tr>
@@ -28,8 +27,8 @@ loadstring(game:GetObjects("rbxassetid://14713089094")[1].Source)()
 <script>
     var textarea = document.getElementById("Loadstring");
     textarea.onclick = function() {
-        this.select();
-        document.execCommand('copy');
+        this.select(); // Select the text inside the textarea
+        document.execCommand('copy'); // Copy the selected text to the clipboard
     }
 </script>
 
