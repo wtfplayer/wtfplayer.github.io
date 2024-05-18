@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make Millions</title>
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 32px;
+        }
+
+        #typing-text {
+            border-right: 0.1em solid white;
+            padding-right: 5px;
+            animation: blink-caret 0.75s infinite;
+        }
+
+        @keyframes blink-caret {
+            from, to {
+                border-color: transparent;
+            }
+            50% {
+                border-color: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="typing-text"></div>
+
+    <script>
+        var text = "″Stay committed and work hard.″ - folix";
+        var speed = 115;
+        var i = 0;
+
+        function typeWriter() {
+            if (i < text.length) {
+                document.getElementById("typing-text").innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, speed);
+            }
+        }
+
+        window.onload = function() {
+            typeWriter();
+        };
+    </script>
+</body>
+</html>
