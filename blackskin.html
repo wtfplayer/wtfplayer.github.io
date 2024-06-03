@@ -74,8 +74,7 @@
     <script>
         function generateLuaScript() {
             const username = document.getElementById('username').value;
-            const luaScript = `
-local args = {
+            const luaScript = `local args = {
     [1] = "Change_Value",
     [2] = game:GetService("ReplicatedStorage").Player_Data.${username}.Customization.Skin_Color.B,
     [3] = 0
