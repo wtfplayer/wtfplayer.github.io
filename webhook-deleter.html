@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Discord Webhook Deleter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #ffe6f0; /* Pink background */
+      color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff; /* White container */
+      padding: 30px 25px 20px;
+      border-radius: 16px;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 460px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 22px;
+      font-weight: 600;
+      color: #000;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-bottom: 15px;
+      color: #000;
+      outline: none;
+      transition: border 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    input:focus {
+      border-color: #ff4d6d; /* Slight pink-red focus */
+    }
+
+    button {
+      background-color: #ff4d6d; /* Bright red button */
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      font-size: 14px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    button:hover {
+      background-color: #e04361;
+    }
+
+    #status {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #28a745; /* Green success */
+      display: none;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    #status.show {
+      display: flex;
+    }
+
+    .footer {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #444;
+    }
+
+    .github {
+      margin-top: 14px;
+      color: #666;
+      transition: color 0.2s;
+    }
+
+    .github:hover {
+      color: #000;
+    }
+
+    .icon {
+      width: 18px;
+      height: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Delete Discord Webhook</h1>
+    <input type="text" id="webhook" placeholder="https://discord.com/api/webhooks/..." />
+    <button onclick="deleteWebhook()">
+      <i data-lucide="trash-2" class="icon"></i> Delete Webhook
+    </button>
+
+    <div id="status">
+      <i data-lucide="check-circle" class="icon"></i>
+      Successfully deleted
+    </div>
+
+    <div class="footer">
+      Made with ❤️ by folix
+    </div>
+
+    <a href="https://github.com/wtfplayer" class="github" target="_blank" title="GitHub">
+      <i data-lucide="github" class="icon"></i>
+    </a>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    async function deleteWebhook() {
+      const webhook = document.getElementById("webhook").value;
+      const status = document.getElementById("status");
+
+      if (!webhook) {
+        status.classList.remove("show");
+        return;
+      }
+
+      try {
+        const res = await fetch(webhook, { method: 'DELETE' });
+
+        if (res.status === 204) {
+          status.classList.add("show");
+        } else {
+          status.classList.remove("show");
+          alert("Error: Webhook not found or already deleted.");
+        }
+      } catch (err) {
+        status.classList.remove("show");
+        alert("Failed to delete webhook.");
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
