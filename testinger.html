@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aetheria – Discord Webhook Spammer</title>
+  
+  <meta name="theme-color" content="#ff4444">
+  <meta name="description" content="Aetheria is a lightning‑fast Discord webhook spammer. Use up to 3 webhooks, custom messages, and a panic stop – all in a beautiful GUI.">
+  <meta property="og:title" content="Aetheria">
+  <meta property="og:description" content="Lightning‑fast Discord webhook spammer with multi‑webhook support and panic stop.">
+  <meta property="og:image" content="https://via.placeholder.com/1200x630/ff4444/ffffff?text=Aetheria">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Aetheria">
+  <meta name="twitter:description" content="Lightning‑fast Discord webhook spammer with multi‑webhook support and panic stop.">
+  <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ff4444'><path d='M13 2L3 14h9l-1 8 10-12h-9l1-8z'/></svg>">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #080808;
+      --bg-card: #111111;
+      --bg-hover: #161616;
+      --border: #1c1c1c;
+      --border-hover: #2a2a2a;
+      --text: #ffffff;
+      --text-muted: #888888;
+      --text-dim: #555555;
+      --accent: #ff4444;
+      --accent-hover: #ff6666;
+      --accent-glow: rgba(255, 68, 68, 0.25);
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Geist', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .icon { width: 20px; height: 20px; stroke: currentColor; stroke-width: 1.5; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+    .icon-sm { width: 16px; height: 16px; }
+
+    .ambient-glow {
+      position: fixed;
+      top: -30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1000px;
+      height: 1000px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 60%);
+      filter: blur(80px);
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 64px;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: rgba(8, 8, 8, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      z-index: 100;
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--text); }
+    .nav-icon-box {
+      width: 28px; height: 28px;
+      background: var(--accent);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 12px var(--accent-glow);
+      transition: transform 0.3s var(--ease);
+    }
+    .nav-logo:hover .nav-icon-box { transform: rotate(-5deg) scale(1.05); }
+    .nav-name { font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
+    
+    .nav-center { display: flex; gap: 4px; }
+    .nav-center a {
+      color: var(--text-muted);
+      font-size: 14px; font-weight: 500;
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      transition: all 0.2s var(--ease);
+    }
+    .nav-center a:hover { color: var(--text); background: var(--bg-hover); }
+    
+    .nav-btn {
+      background: var(--accent);
+      color: #fff;
+      font-size: 13px; font-weight: 600;
+      padding: 9px 18px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Geist', sans-serif;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s var(--ease);
+      box-shadow: 0 4px 14px var(--accent-glow);
+    }
+    .nav-btn:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 6px 18px var(--accent-glow); }
+    
+    .hero {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 120px 24px 40px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-muted);
+      font-size: 12px; font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 99px;
+      margin-bottom: 32px;
+    }
+    .badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: pulse 2s infinite var(--ease);
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(1.2); }
+    }
+    
+    .hero-title {
+      font-size: 72px;
+      font-weight: 700;
+      line-height: 1.0;
+      letter-spacing: -.04em;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+    .hero-title .red {
+      background: linear-gradient(135deg, #ff6666, #ff2222);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero-desc {
+      font-size: 19px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 40px;
+      font-weight: 300;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-desc strong { color: var(--text); font-weight: 500; }
+    
+    .hero-btns { display: flex; gap: 12px; align-items: center; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+    
+    .btn-solid {
+      background: var(--accent);
+      color: #fff;
+      font-size: 14px; font-weight: 600;
+      padding: 14px 28px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Geist', sans-serif;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s var(--ease);
+      box-shadow: 0 4px 14px var(--accent-glow);
+    }
+    .btn-solid:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 8px 20px var(--accent-glow); }
+    
+    .btn-outline {
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 14px; font-weight: 500;
+      padding: 14px 28px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-family: 'Geist', sans-serif;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s var(--ease);
+    }
+    .btn-outline:hover { color: var(--text); border-color: var(--border-hover); background: var(--bg-hover); }
+    
+    .hero-meta { font-size: 13px; color: var(--text-dim); }
+    
+    .mockup-container {
+      max-width: 1000px;
+      margin: 80px auto 0;
+      padding: 0 24px;
+      perspective: 2000px;
+    }
+    .mockup-outer {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 50px 100px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.02);
+      transition: transform 0.5s var(--ease);
+      transform: rotateX(5deg);
+    }
+    .mockup-outer:hover { transform: rotateX(0deg); }
+    
+    .mockup-titlebar {
+      background: #0d0d0d;
+      padding: 12px 16px;
+      display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .dots { display: flex; gap: 6px; }
+    .dot { width: 11px; height: 11px; border-radius: 50%; }
+    .d-r { background: #ff5f57; } .d-y { background: #febc2e; } .d-g { background: #28c840; }
+    .win-title { font-size: 12px; color: var(--text-dim); margin-left: 8px; }
+    
+    .mockup-inner { display: flex; min-height: 300px; }
+    .mockup-sidebar {
+      width: 220px;
+      border-right: 1px solid var(--border);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .ms-item {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; color: var(--text-muted);
+      padding: 8px 10px; border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .ms-item.active { background: var(--bg-hover); color: var(--text); }
+    
+    .mockup-main {
+      flex: 1;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .m-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      transition: all 0.2s var(--ease);
+    }
+    .m-row:hover { border-color: var(--accent); transform: translateX(4px); }
+    .m-row-text { font-size: 13px; color: var(--text); font-weight: 500; display: flex; align-items: center; gap: 10px; }
+    .m-row-key { font-size: 11px; color: var(--text-muted); background: var(--bg-hover); padding: 3px 8px; border-radius: 5px; border: 1px solid var(--border); font-family: monospace; }
+    .m-status { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #28c840; font-weight: 600; }
+    .status-dot { width: 6px; height: 6px; background: #28c840; border-radius: 50%; box-shadow: 0 0 6px #28c840; }
+    
+    .section { padding: 120px 48px; max-width: 1100px; margin: 0 auto; }
+    .section-label { font-size: 13px; font-weight: 600; color: var(--accent); letter-spacing: .05em; margin-bottom: 16px; text-align: center; }
+    .section-title { font-size: 48px; font-weight: 700; color: var(--text); text-align: center; letter-spacing: -.03em; margin-bottom: 16px; }
+    .section-sub { font-size: 18px; color: var(--text-muted); text-align: center; margin-bottom: 64px; max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.6; font-weight: 300; }
+    
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .feat {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 32px;
+      border-radius: 16px;
+      transition: all 0.3s var(--ease);
+      position: relative;
+      overflow: hidden;
+    }
+    .feat::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s var(--ease);
+    }
+    .feat:hover {
+      transform: translateY(-4px);
+      border-color: var(--border-hover);
+      background: var(--bg-hover);
+    }
+    .feat:hover::before { opacity: 1; }
+    
+    .feat-icon {
+      width: 44px; height: 44px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text);
+      margin-bottom: 24px;
+      transition: all 0.3s var(--ease);
+    }
+    .feat:hover .feat-icon {
+      background: rgba(255, 68, 68, 0.1);
+      border-color: rgba(255, 68, 68, 0.3);
+      color: var(--accent);
+      transform: scale(1.05);
+    }
+    
+    .feat-title { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 8px; letter-spacing: -.02em; }
+    .feat-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; font-weight: 300; }
+    
+    .download-wrap {
+      max-width: 820px;
+      margin: 0 auto;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 60px 48px;
+      text-align: center;
+      transition: border-color 0.3s;
+    }
+    .download-wrap:hover { border-color: var(--accent); }
+    .download-icon {
+      font-size: 72px;
+      margin-bottom: 24px;
+    }
+    .download-title { font-size: 36px; font-weight: 700; letter-spacing: -.03em; margin-bottom: 12px; }
+    .download-desc { font-size: 16px; color: var(--text-muted); max-width: 500px; margin: 0 auto 32px; line-height: 1.5; }
+    .btn-download {
+      background: var(--accent);
+      color: #fff;
+      font-size: 18px; font-weight: 600;
+      padding: 18px 40px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Geist', sans-serif;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 8px 24px var(--accent-glow);
+      transition: all 0.2s var(--ease);
+    }
+    .btn-download:hover { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 12px 32px var(--accent-glow); }
+    .download-meta { margin-top: 24px; font-size: 13px; color: var(--text-dim); }
+
+    /* NEW: false positive note */
+    .false-positive-note {
+      background: rgba(255, 68, 68, 0.08);
+      border: 1px solid rgba(255, 68, 68, 0.25);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin: 24px auto 0;
+      max-width: 700px;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .false-positive-note strong { color: var(--accent); }
+    
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
+    .reveal.on { opacity: 1; transform: none; }
+    
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 48px;
+      display: flex; align-items: center; justify-content: space-between;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .footer-logo { display: flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text); }
+    .footer-name { font-size: 14px; font-weight: 600; }
+    .footer-links { display: flex; gap: 28px; }
+    .footer-links a { font-size: 13px; color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--text); }
+    .footer-copy { font-size: 13px; color: var(--text-dim); }
+    
+    @media(max-width: 900px) {
+      .hero { padding: 80px 24px 40px; }
+      .hero-title { font-size: 44px; }
+      .mockup-container { margin-top: 40px; }
+      nav { padding: 0 24px; }
+      .nav-center { display: none; }
+      .section { padding: 80px 24px; }
+      .section-title { font-size: 32px; }
+      .grid-3 { grid-template-columns: 1fr; }
+      .download-wrap { padding: 40px 24px; }
+      .download-title { font-size: 28px; }
+      footer { flex-direction: column; gap: 20px; text-align: center; padding: 32px 24px; }
+      .footer-links { justify-content: center; flex-wrap: wrap; }
+      .mockup-sidebar { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SVG Icon Library -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none;">
+    <symbol id="i-discord" viewBox="0 0 24 24"><path fill="currentColor" d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"></circle><path d="M10.85 12.15L19 4"></path><path d="M18 5l2 2"></path><path d="M15 8l2 2"></path></symbol>
+    <symbol id="i-clipboard" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></symbol>
+    <symbol id="i-block" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></symbol>
+    <symbol id="i-cpu" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></symbol>
+  </svg>
+
+  <div class="ambient-glow"></div>
+
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-icon-box">
+        <svg class="icon icon-sm"><use href="#i-bolt"></use></svg>
+      </div>
+      <span class="nav-name">Aetheria</span>
+    </a>
+    <div class="nav-center">
+      <a href="#" class="active">Home</a>
+      <a href="#features">Features</a>
+      <a href="#download">Download</a>
+    </div>
+    <a href="#download" class="nav-btn">
+      <svg class="icon icon-sm"><use href="#i-bolt"></use></svg>
+      Get Aetheria
+    </a>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Discord Webhook Spammer
+    </div>
+    <h1 class="hero-title">
+      Lightning‑Fast<br/>
+      <span class="red">Webhook</span> Spam<br/>
+      Tool
+    </h1>
+    <p class="hero-desc">
+      Aetheria lets you spam Discord webhooks at <strong>blazing speed</strong> with up to 3 webhooks in parallel. Custom messages, built‑in rate‑limit handling, and a <strong>panic stop</strong> — all in a beautiful GUI.
+    </p>
+    <div class="hero-btns">
+      <a href="#download" class="btn-solid">
+        <svg class="icon icon-sm"><use href="#i-bolt"></use></svg>
+        Download Now
+      </a>
+      <a href="#features" class="btn-outline">
+        Learn More
+      </a>
+    </div>
+    <div class="hero-meta">Windows 10/11 · Standalone .exe · No installation</div>
+  </div>
+
+  <!-- MOCKUP -->
+  <div class="mockup-container">
+    <div class="mockup-outer">
+      <div class="mockup-titlebar">
+        <div class="dots">
+          <div class="dot d-r"></div>
+          <div class="dot d-y"></div>
+          <div class="dot d-g"></div>
+        </div>
+        <span class="win-title">Aetheria v1.0</span>
+      </div>
+      <div class="mockup-inner">
+        <div class="mockup-sidebar">
+          <div class="ms-item active">
+            <svg class="icon icon-sm"><use href="#i-grid"></use></svg>
+            Dashboard
+          </div>
+          <div class="ms-item">
+            <svg class="icon icon-sm"><use href="#i-shield"></use></svg>
+            Webhooks
+          </div>
+          <div class="ms-item">
+            <svg class="icon icon-sm"><use href="#i-key"></use></svg>
+            Messages
+          </div>
+          <div class="ms-item">
+            <svg class="icon icon-sm"><use href="#i-clipboard"></use></svg>
+            Logs
+          </div>
+        </div>
+        <div class="mockup-main">
+          <div class="m-row">
+            <span class="m-row-text">
+              <svg class="icon icon-sm"><use href="#i-user"></use></svg>
+              Webhook #1
+            </span>
+            <span class="m-row-key">https://discord.com/api/webhooks/...</span>
+          </div>
+          <div class="m-row">
+            <span class="m-row-text">
+              <svg class="icon icon-sm"><use href="#i-user"></use></svg>
+              Webhook #2
+            </span>
+            <span class="m-row-key">https://discord.com/api/webhooks/...</span>
+          </div>
+          <div class="m-row">
+            <span class="m-row-text">
+              <svg class="icon icon-sm"><use href="#i-user"></use></svg>
+              Webhook #3
+            </span>
+            <span class="m-row-key">https://discord.com/api/webhooks/...</span>
+          </div>
+          <div class="m-row">
+            <span class="m-row-text">
+              <svg class="icon icon-sm"><use href="#i-bolt"></use></svg>
+              Spam Message
+            </span>
+            <span class="m-row-key">@everyone LLL LOSER</span>
+          </div>
+          <div class="m-row">
+            <span class="m-row-text">
+              <svg class="icon icon-sm"><use href="#i-shield"></use></svg>
+              Status
+            </span>
+            <div class="m-status">
+              <span class="status-dot"></span> READY
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="section" id="features">
+    <div class="reveal">
+      <div class="section-label">Everything you need</div>
+      <h2 class="section-title">Built for speed and control</h2>
+      <p class="section-sub">Spam Discord webhooks at max speed without getting rate‑limited — with a panic stop at your fingertips.</p>
+    </div>
+    
+    <div class="grid-3 reveal">
+      <div class="feat">
+        <div class="feat-icon"><svg class="icon"><use href="#i-shield"></use></svg></div>
+        <div class="feat-title">Up to 3 Webhooks</div>
+        <div class="feat-desc">Use 1, 2, or all 3 webhooks in parallel. Recommended: 3 for maximum spam rate.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="icon"><use href="#i-key"></use></svg></div>
+        <div class="feat-title">Custom Messages</div>
+        <div class="feat-desc">Type anything — @everyone, @here, or custom text. The message is sent exactly as you type it.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="icon"><use href="#i-clipboard"></use></svg></div>
+        <div class="feat-title">Panic Stop</div>
+        <div class="feat-desc">One click kills all spam threads instantly. No more waiting — you're always in control.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="icon"><use href="#i-bolt"></use></svg></div>
+        <div class="feat-title">Rate‑Limit Handling</div>
+        <div class="feat-desc">Automatically waits when Discord throttles you, then resumes — no manual intervention needed.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="icon"><use href="#i-block"></use></svg></div>
+        <div class="feat-title">Live Logging</div>
+        <div class="feat-desc">See every message sent, errors, and rate‑limit warnings in real time. Clear the log with one button.</div>
+      </div>
+      <div class="feat">
+        <div class="feat-icon"><svg class="icon"><use href="#i-cpu"></use></svg></div>
+        <div class="feat-title">VPN Recommended</div>
+        <div class="feat-desc">We advise using a VPN to prevent your IP from being temporarily banned by Discord.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOWNLOAD SECTION -->
+  <div class="section" id="download">
+    <div class="reveal">
+      <div class="section-label">Get Aetheria</div>
+      <h2 class="section-title">Download v1.0</h2>
+      <p class="section-sub">Ready to spam? Download the standalone .exe and run — no installation required.</p>
+    </div>
+    <div class="download-wrap reveal">
+      <div class="download-icon">⚡</div>
+      <div class="download-title">Aetheria v1.0</div>
+      <div class="download-desc">
+        Windows 10/11 · 50 MB · No dependencies<br>
+        <span style="color: var(--text-dim); font-size: 14px;">Use a VPN to protect your IP.</span>
+      </div>
+      <!-- Updated download link -->
+      <a href="https://github.com/wtfplayer/redemption/raw/refs/heads/main/Aetheria_v1.0.exe" class="btn-download" download>
+        <svg class="icon" style="width:24px;height:24px;"><use href="#i-bolt"></use></svg>
+        Download for Windows (.exe)
+      </a>
+      <!-- False positive note -->
+      <div class="false-positive-note">
+        <strong>⚠️ Windows Defender may flag this as a false positive</strong> – this is due to PyInstaller packaging, not malware. 
+        Add an exclusion or <a href="https://www.microsoft.com/en-us/wdsi/filesubmission" target="_blank" style="color:var(--accent);">submit it to Microsoft</a> to whitelist it.
+      </div>
+      <div class="download-meta">Free · Open source · For educational use only</div>
+    </div>
+  </div>
+
+  <footer>
+    <a href="#" class="footer-logo">
+      <div class="nav-icon-box" style="width:24px; height:24px;">
+        <svg class="icon icon-sm"><use href="#i-bolt"></use></svg>
+      </div>
+      <span class="footer-name">Aetheria</span>
+    </a>
+    <div class="footer-links">
+      <a href="#features">Features</a>
+      <a href="#download">Download</a>
+    </div>
+    <div class="footer-copy">© 2026 Aetheria</div>
+  </footer>
+
+  <script>
+    const obs = new IntersectionObserver(els => {
+      els.forEach(e => {
+        if(e.isIntersecting) {
+          if (e.target.classList.contains('grid-3') || e.target.classList.contains('download-wrap')) {
+            const children = Array.from(e.target.children);
+            children.forEach((child, index) => {
+              setTimeout(() => {
+                child.style.opacity = '1';
+                child.style.transform = 'translateY(0)';
+              }, index * 100);
+            });
+          }
+          e.target.classList.add('on');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    document.querySelectorAll('.grid-3 > .feat, .download-wrap > *').forEach(el => {
+      if (!el.classList.contains('reveal')) {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+      }
+    });
+  </script>
+</body>
+</html>
